@@ -41,13 +41,14 @@ export default function MemoryGame() {
     };
   }, []);
 
-  // Auto-dismiss mismatch after a short delay.
+  // Auto-dismiss mismatch after a fixed reveal window. The window stays the same
+  // for reduced-motion users so they can still read and compare the mismatched
+  // pair; only the flip animation is disabled (see the card transition below).
   useEffect(() => {
     if (gameState.phase !== 'locked') return;
-    const delay = reducedMotion ? 0 : 800;
-    const id = setTimeout(() => setGameState(prev => dismissMismatch(prev)), delay);
+    const id = setTimeout(() => setGameState(prev => dismissMismatch(prev)), 800);
     return () => clearTimeout(id);
-  }, [gameState.phase, gameState.moves, reducedMotion]);
+  }, [gameState.phase, gameState.moves]);
 
   // Record result once when game completes.
   useEffect(() => {
@@ -169,8 +170,9 @@ export default function MemoryGame() {
       <div className="grid w-full max-w-xs grid-cols-4 gap-2 sm:max-w-sm">
         {gameState.cards.map((card, idx) => {
           const isDown = card.face === 'down';
-          const isDisabled =
-            !isDown || phase === 'locked' || phase === 'complete';
+          // Do not disable face-down cards during the mismatch lock: keep keyboard
+          // focus in place. flipCard() already no-ops while phase is 'locked'.
+          const isDisabled = !isDown || phase === 'complete';
 
           const ariaLabel = isDown
             ? `Card ${idx + 1}, face down`

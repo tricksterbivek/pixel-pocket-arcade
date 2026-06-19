@@ -170,8 +170,11 @@ export default function ReactionGame() {
             ? Math.round(performance.now() - readyAtRef.current)
             : 0;
         readyAtRef.current = null;
+        const completesSession = state.rounds.length + 1 >= ROUNDS_REQUIRED;
         dispatch({ type: 'REACT', time: elapsed });
-        audio.play('success');
+        // On the final round the completion effect plays the success cue, so
+        // skip the per-round cue here to avoid a doubled sound.
+        if (!completesSession) audio.play('success');
         break;
       }
       case 'result':
@@ -182,7 +185,7 @@ export default function ReactionGame() {
         // No action - "New Game" button in GameShell handles restart
         break;
     }
-  }, [state.phase, arm, clearWaitTimer]);
+  }, [state.phase, state.rounds.length, arm, clearWaitTimer]);
 
   // Pointer (mouse + touch) - use onPointerDown so we don't fire twice via click
   function handlePointerDown(e: ReactPointerEvent<HTMLButtonElement>) {

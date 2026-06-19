@@ -35,7 +35,7 @@ function parseRecentPlay(value: unknown): RecentPlay | null {
   if (typeof game !== 'string' || !VALID_GAME_IDS.includes(game as GameId)) return null;
   if (typeof label !== 'string') return null;
   if (!isFiniteNumber(at)) return null;
-  return { game: game as GameId, label, at };
+  return { game: game as GameId, label: label.slice(0, 120), at };
 }
 
 /**
@@ -61,6 +61,7 @@ export function parseArcadeState(value: unknown): ArcadeStorageV1 {
 
   const recentPlaysRaw = Array.isArray(value.recentPlays) ? value.recentPlays : [];
   const recentPlays = recentPlaysRaw
+    .slice(0, 100) // bound validation work on a hostile oversized array
     .map(parseRecentPlay)
     .filter((play): play is RecentPlay => play !== null)
     .slice(0, MAX_RECENT);
