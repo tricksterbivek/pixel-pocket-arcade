@@ -1,0 +1,15 @@
+<suitelet scriptid="customscript_st_suitereact_ui">
+  <name>SuiteReact UI</name>
+  <scriptfile>[/SuiteScripts/SuiteReact/st_suitereact_ui.js]</scriptfile>
+  <scriptdeployments>
+    <scriptdeployment scriptid="customdeploy_st_suitereact_ui">
+      <isdeployed>T</isdeployed>
+      <status>RELEASED</status>
+      <title>SuiteReact UI Deployment</title>
+      <allroles>F</allroles>
+      <loglevel>DEBUG</loglevel>
+      <runasrole>ADMINISTRATOR</runasrole>
+      <availablewithoutlogin>F</availablewithoutlogin>
+    </scriptdeployment>
+  </scriptdeployments>
+</suitelet>
