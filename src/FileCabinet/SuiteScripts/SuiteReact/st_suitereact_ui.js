@@ -32,8 +32,9 @@ define(['N/file', 'N/query', 'N/record', 'N/log'], (file, query, record, log) =>
       table: 'customer',
       // entityid = the "ID" shown in the UI; companyname for company customers.
       idColumn: 'id',
-      // Columns returned by `list`, aliased to the stable API shape { id, name, email, date }.
-      listSelect: 'id, BUILTIN.DF(entitystatus) AS status, COALESCE(companyname, entityid) AS name, email, datecreated AS date',
+      // Columns returned by `list`, aliased to the stable API shape { id, name, email, date }
+      // (see ARCHITECTURE.md §5.2). Add columns here to surface more in the dashboard.
+      listSelect: 'id, COALESCE(companyname, entityid) AS name, email, datecreated AS date',
       // Free-text search targets for `q`.
       searchColumns: ['entityid', 'companyname', 'email'],
     },
@@ -176,15 +177,15 @@ define(['N/file', 'N/query', 'N/record', 'N/log'], (file, query, record, log) =>
       throw new Error('not found');
     }
 
-    return { id, fields: results[0] };
+    // Suitelet query params are strings; coerce to a number to match the API contract.
+    return { id: Number(id), fields: results[0] };
   };
 
   /**
    * action=update — POST { action, type, id, values }.
    * Loads the record, applies each field from `values`, saves. Returns { id }.
    */
-  const actionUpdate = (request) => {
-    const body = parseBody(request);
+  const actionUpdate = (request, body) => {
     const cfg = resolveType(body.type);
     const id = body.id;
     if (!id) {
@@ -199,9 +200,11 @@ define(['N/file', 'N/query', 'N/record', 'N/log'], (file, query, record, log) =>
     Object.keys(values).forEach((fieldId) => {
       rec.setValue({ fieldId, value: values[fieldId] });
     });
-    rec.save();
+    // record.save() returns the internal id of the saved record — return the
+    // confirmed id (a number) rather than echoing the input.
+    const savedId = rec.save();
 
-    return { id };
+    return { id: savedId };
   };
 
   /**
@@ -210,9 +213,11 @@ define(['N/file', 'N/query', 'N/record', 'N/log'], (file, query, record, log) =>
    */
   const handleAction = (request) => {
     let action = request.parameters.action;
-    if (!action && request.method === 'POST') {
+    // Parse the POST body at most once and thread it to body-based actions.
+    const body = request.method === 'POST' ? parseBody(request) : {};
+    if (!action) {
       // Allow the action to live in the JSON body (per §5.4).
-      action = parseBody(request).action;
+      action = body.action;
     }
 
     switch (action) {
@@ -221,7 +226,7 @@ define(['N/file', 'N/query', 'N/record', 'N/log'], (file, query, record, log) =>
       case 'get':
         return actionGet(request);
       case 'update':
-        return actionUpdate(request);
+        return actionUpdate(request, body);
       default:
         // POST/GET reached the JSON branch but carried no usable action.
         throw new Error('missing action');

@@ -17,6 +17,9 @@ project.json.bak
 .vite/
 *.local
 
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 # Test artifacts
 coverage/
 playwright-report/
