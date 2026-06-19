@@ -43,6 +43,10 @@ function GameCard({ game, best }: { game: GameDefinition; best: string }) {
         />
       </div>
       <p className="text-sm text-muted">{game.description}</p>
+      <p className="text-xs text-muted">
+        <span aria-hidden="true">{'> '}</span>
+        {game.controls[0]}
+      </p>
       <div className="mt-auto flex items-end justify-between pt-2">
         <div>
           <p className="font-display text-xs uppercase tracking-[0.08em] text-muted">Best</p>
