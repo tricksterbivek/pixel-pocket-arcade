@@ -11,11 +11,11 @@ interface StatProps {
 export function Stat({ label, value, accent }: StatProps) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-display text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+      <span className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-muted">
         {label}
       </span>
       <span
-        className="font-display text-2xl font-bold tabular-nums text-fg"
+        className="font-mono text-2xl font-bold tabular-nums text-fg"
         style={accent ? { color: accent } : undefined}
       >
         {value}

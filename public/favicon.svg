@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Pixel Pocket Arcade">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff4d8d"/>
+      <stop offset="1" stop-color="#3ac6f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0a0c12"/>
+  <rect x="7" y="7" width="50" height="50" rx="13" fill="url(#g)"/>
+  <path d="M27 21 L45 32 L27 43 Z" fill="#0a0c12"/>
+</svg>

@@ -2,18 +2,18 @@
 
 @theme {
   /* Background layers */
-  --color-base: #0b0e14;
+  --color-base: #0a0c12;
   --color-surface: #141a24;
-  --color-raised: #1e2633;
+  --color-raised: #1c2433;
 
   /* Text */
-  --color-fg: #f2f5f9;
-  --color-muted: #a7b0be;
-  --color-inverse: #0b0e14;
+  --color-fg: #f4f7fb;
+  --color-muted: #aab4c5;
+  --color-inverse: #0a0c12;
 
   /* Lines and feedback */
-  --color-border: #2a3342;
-  --color-border-strong: #687486;
+  --color-border: #283143;
+  --color-border-strong: #6b7689;
   --color-focus: #5ce0ff;
 
   /* Accents */
@@ -23,23 +23,24 @@
   --color-reaction: #ffb02e;
   --color-danger: #ff5a5a;
 
-  /* Type */
-  --font-display: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', Menlo,
-    Consolas, 'Courier New', monospace;
+  /* Type: clean sans for everything, monospace reserved for numeric stats */
+  --font-display: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', Menlo, Consolas, monospace;
 
-  /* Radius */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
+  /* Radius: rounded, modern */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
 
-  /* Elevation (hard pixel edges, no glow) */
-  --shadow-pixel: 0 2px 0 0 rgba(0, 0, 0, 0.55);
-  --shadow-raised: 0 4px 0 0 rgba(0, 0, 0, 0.55);
-  --shadow-modal: 0 8px 28px -10px rgba(0, 0, 0, 0.7);
+  /* Elevation: soft, blurred (no hard pixel edges) */
+  --shadow-pixel: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-raised: 0 14px 34px -16px rgba(0, 0, 0, 0.7);
+  --shadow-modal: 0 30px 70px -24px rgba(0, 0, 0, 0.8);
 
   /* Motion */
-  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 }
 
@@ -51,13 +52,17 @@
   body {
     margin: 0;
     min-height: 100dvh;
-    background-color: var(--color-base);
-    /* Subtle static dot grid, never under text contrast, removed for reduced motion. */
-    background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 22px 22px;
     color: var(--color-fg);
     font-family: var(--font-body);
     line-height: 1.6;
+    /* Sleek dark base with soft neon glows in the corners (decorative, behind content). */
+    background-color: var(--color-base);
+    background-image:
+      radial-gradient(60% 50% at 12% -5%, rgba(255, 77, 141, 0.16), transparent 70%),
+      radial-gradient(55% 45% at 100% 5%, rgba(58, 198, 240, 0.14), transparent 70%),
+      radial-gradient(60% 60% at 50% 115%, rgba(52, 226, 122, 0.1), transparent 70%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 
   h1,
@@ -65,7 +70,8 @@
   h3 {
     font-family: var(--font-display);
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
 
   /* High contrast, always visible focus indicator. */
@@ -79,7 +85,14 @@
   }
 }
 
-/* Full reduced-motion coverage: collapse all motion, drop decorative texture. */
+@utility text-gradient {
+  background: linear-gradient(100deg, var(--color-fg) 0%, var(--color-brand) 55%, var(--color-memory) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Full reduced-motion coverage: collapse all motion. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -88,8 +101,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  body {
-    background-image: none;
   }
 }

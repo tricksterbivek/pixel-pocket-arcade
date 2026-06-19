@@ -5,23 +5,23 @@ export type ButtonSize = 'md' | 'lg';
 
 const BASE =
   'inline-flex items-center justify-center gap-2 min-h-11 min-w-11 rounded-md font-semibold ' +
-  'touch-manipulation select-none transition-[transform,box-shadow,background-color,filter] ' +
-  'duration-150 ease-out active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed ' +
-  'disabled:active:scale-100 disabled:shadow-none';
+  'touch-manipulation select-none transition-all duration-200 ease-out ' +
+  'hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] ' +
+  'disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none';
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: 'bg-brand text-inverse shadow-raised active:shadow-pixel hover:brightness-105',
-  accent:
-    'bg-[var(--accent,var(--color-brand))] text-inverse shadow-raised active:shadow-pixel hover:brightness-105',
+  primary:
+    'bg-linear-to-br from-brand to-[#ff6fa0] text-inverse shadow-raised hover:shadow-[0_16px_36px_-14px_rgba(255,77,141,0.7)]',
+  accent: 'bg-[var(--accent,var(--color-brand))] text-inverse shadow-raised hover:brightness-110',
   secondary:
-    'bg-raised text-fg border-2 border-border-strong shadow-pixel hover:bg-surface active:shadow-none',
-  ghost: 'bg-transparent text-fg hover:bg-white/5 active:shadow-none',
-  danger: 'bg-danger text-inverse shadow-raised active:shadow-pixel hover:brightness-105',
+    'bg-raised/80 text-fg border border-border-strong/60 backdrop-blur hover:bg-raised hover:border-border-strong',
+  ghost: 'bg-transparent text-fg hover:bg-white/10',
+  danger: 'bg-linear-to-br from-danger to-[#ff7d7d] text-inverse shadow-raised hover:brightness-110',
 };
 
 const SIZES: Record<ButtonSize, string> = {
-  md: 'px-4 text-base',
-  lg: 'px-6 py-3 text-base',
+  md: 'px-5 text-sm',
+  lg: 'px-7 py-3 text-base',
 };
 
 /** Shared button styling, also used by router links that should look like buttons. */

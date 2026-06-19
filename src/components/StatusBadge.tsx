@@ -22,11 +22,11 @@ export function StatusBadge({ status, label }: StatusBadgeProps) {
   const meta = STATUS[status];
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-sm border px-2 py-0.5 font-display text-xs font-semibold uppercase tracking-wider"
+      className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide"
       style={{
         color: meta.color,
-        borderColor: 'currentColor',
-        backgroundColor: 'color-mix(in srgb, currentColor 16%, transparent)',
+        borderColor: 'color-mix(in srgb, currentColor 45%, transparent)',
+        backgroundColor: 'color-mix(in srgb, currentColor 14%, transparent)',
       }}
     >
       <span aria-hidden="true">{meta.icon}</span>

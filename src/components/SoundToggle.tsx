@@ -22,19 +22,19 @@ export function SoundToggle() {
       role="switch"
       aria-checked={on}
       onClick={handleClick}
-      className="inline-flex min-h-11 items-center gap-2 rounded-md border-2 border-border-strong bg-raised px-3 text-sm font-semibold text-fg shadow-pixel transition-transform duration-150 ease-out active:scale-[0.97]"
+      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-strong/60 bg-raised/70 px-4 text-sm font-semibold text-fg backdrop-blur transition-all duration-200 ease-out hover:border-border-strong active:scale-[0.97]"
     >
       <span aria-hidden="true">{on ? '♪' : '×'}</span>
       <span>{on ? 'Sound on' : 'Sound off'}</span>
       <span
         aria-hidden="true"
-        className="relative inline-block h-5 w-9 rounded-full border-2 border-border-strong"
+        className="relative inline-block h-5 w-9 rounded-full border border-border-strong/60"
         style={{
-          backgroundColor: on ? 'color-mix(in srgb, var(--color-brand) 30%, transparent)' : 'transparent',
+          backgroundColor: on ? 'color-mix(in srgb, var(--color-brand) 36%, transparent)' : 'transparent',
         }}
       >
         <span
-          className="absolute top-0.5 h-3 w-3 rounded-sm bg-fg transition-[left] duration-150 ease-out"
+          className="absolute top-0.5 h-3.5 w-3.5 rounded-full bg-fg transition-[left] duration-200 ease-out"
           style={{ left: on ? '1.125rem' : '0.125rem' }}
         />
       </span>

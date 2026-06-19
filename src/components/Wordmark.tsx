@@ -5,16 +5,19 @@ interface WordmarkProps {
   className?: string;
 }
 
-/** The "Pixel Pocket Arcade" lockup. Visible text carries the name; the
- * leading block is decorative. ARCADE glows in the brand accent. */
+/** Compact brand lockup: a gradient logo tile plus the name. */
 export function Wordmark({ as: Tag = 'span', className = '' }: WordmarkProps) {
   return (
-    <Tag className={`font-display font-bold uppercase tracking-[0.08em] ${className}`}>
-      <span aria-hidden="true" className="text-brand">
-        {'■ '}
+    <Tag className={`inline-flex items-center gap-2 font-display font-extrabold tracking-tight ${className}`}>
+      <span
+        aria-hidden="true"
+        className="grid aspect-square h-[1.15em] place-items-center rounded-[0.3em] bg-linear-to-br from-brand to-memory text-[0.62em] text-inverse shadow-raised"
+      >
+        ▶
       </span>
-      <span className="text-fg">Pixel Pocket </span>
-      <span className="text-brand">Arcade</span>
+      <span className="text-fg">
+        Pixel Pocket <span className="text-brand">Arcade</span>
+      </span>
     </Tag>
   );
 }
