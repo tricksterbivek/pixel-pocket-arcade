@@ -1,4 +1,4 @@
-import type { ArcadeStorageV1, GameResult, RecentPlay } from '../types/game';
+import type { ArcadeStorage, GameResult, RecentPlay } from '../types/game';
 import { MAX_RECENT } from './storage';
 
 type MemoryScore = { moves: number; elapsedMs: number };
@@ -32,6 +32,8 @@ export function summarizePlay(result: GameResult): string {
       return `${result.moves} moves, ${formatElapsed(result.elapsedMs)}`;
     case 'reaction':
       return `Avg ${Math.round(result.averageMs)} ms`;
+    case 'drive':
+      return `${result.score} m`;
   }
 }
 
@@ -41,10 +43,10 @@ export function summarizePlay(result: GameResult): string {
  * (newest first, capped at MAX_RECENT). `at` is injected for determinism.
  */
 export function applyResult(
-  state: ArcadeStorageV1,
+  state: ArcadeStorage,
   result: GameResult,
   at: number,
-): ArcadeStorageV1 {
+): ArcadeStorage {
   const records = { ...state.records };
 
   switch (result.game) {
@@ -60,6 +62,9 @@ export function applyResult(
       if (isBetterReactionAvg(result.averageMs, records.reactionBestAverageMs)) {
         records.reactionBestAverageMs = result.averageMs;
       }
+      break;
+    case 'drive':
+      records.driveHighScore = Math.max(records.driveHighScore, result.score);
       break;
   }
 

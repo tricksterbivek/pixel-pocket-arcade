@@ -1,5 +1,5 @@
 /**
- * Snake game spec — idle overlay, keyboard direction, D-pad direction,
+ * Snake game spec - idle overlay, keyboard direction, D-pad direction,
  * pause/resume, and no console errors.
  *
  * Runs on both `desktop` (Desktop Chrome) and `mobile` (Pixel 5) projects.
@@ -67,7 +67,7 @@ test('D-pad Up button starts game from idle and removes overlay', async ({ page 
 
   await expect(page.getByText(/Press an arrow key or D-pad to start/i)).toBeVisible();
 
-  // Tap the D-pad Up button (touch-friendly path — pointer events)
+  // Tap the D-pad Up button (touch-friendly path - pointer events)
   await page.getByRole('button', { name: 'Up' }).click();
 
   await expect(page.getByText(/Press an arrow key or D-pad to start/i)).not.toBeVisible({
@@ -94,10 +94,10 @@ test('D-pad Down button changes direction while game is running', async ({ page 
     timeout: 3000,
   });
 
-  // Tap D-pad Down — should not crash or show an error overlay
+  // Tap D-pad Down - should not crash or show an error overlay
   await page.getByRole('button', { name: 'Down' }).click();
 
-  // Game is still running — no "Game Over" alert yet
+  // Game is still running - no "Game Over" alert yet
   const gameOverAlert = page.getByRole('alert');
   // Give one tick for any potential crash to appear
   await page.waitForTimeout(200);
@@ -123,7 +123,7 @@ test('Space key pauses and resumes the game', async ({ page }) => {
     timeout: 3000,
   });
 
-  // Pause — the overlay text is unique; /Paused/i is ambiguous (also matches status badge)
+  // Pause - the overlay text is unique; /Paused/i is ambiguous (also matches status badge)
   await page.keyboard.press('Space');
   await expect(page.getByText(/Paused - Space/i)).toBeVisible({ timeout: 3000 });
 

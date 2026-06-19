@@ -12,6 +12,7 @@ import Loading from './components/Loading';
 const Snake = lazy(() => import('./games/snake'));
 const Memory = lazy(() => import('./games/memory'));
 const Reaction = lazy(() => import('./games/reaction'));
+const Drive = lazy(() => import('./games/drive'));
 
 function lazyRoute(Game: ComponentType) {
   return (
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/games/snake" element={lazyRoute(Snake)} />
           <Route path="/games/memory" element={lazyRoute(Memory)} />
           <Route path="/games/reaction" element={lazyRoute(Reaction)} />
+          <Route path="/games/drive" element={lazyRoute(Drive)} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

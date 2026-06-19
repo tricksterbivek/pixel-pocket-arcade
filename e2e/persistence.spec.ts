@@ -1,5 +1,5 @@
 /**
- * Persistence spec — settings and records survive a page reload; the
+ * Persistence spec - settings and records survive a page reload; the
  * "Reset data" flow clears everything and restores empty state.
  *
  * SEEDING STRATEGY
@@ -8,14 +8,14 @@
  * `addInitScript` scripts are injected on EVERY navigation, including
  * `page.reload()`.  If we seeded via addInitScript and then the user toggled
  * a setting, a reload would re-inject the original seed and overwrite the
- * change — the test would pass but not test real persistence.
+ * change - the test would pass but not test real persistence.
  *
  * Instead, for tests that need pre-existing records:
- *   1. `page.goto('/')` — app mounts with default state.
- *   2. `page.evaluate(...)` — write to localStorage (app already mounted).
- *   3. `page.reload()` — app re-mounts, reads the seeded localStorage.
+ *   1. `page.goto('/')` - app mounts with default state.
+ *   2. `page.evaluate(...)` - write to localStorage (app already mounted).
+ *   3. `page.reload()` - app re-mounts, reads the seeded localStorage.
  *   4. Assert data is visible.
- *   5. `page.reload()` again — confirm persistence.
+ *   5. `page.reload()` again - confirm persistence.
  *
  * Key DOM facts:
  *   Sound toggle:   role="switch"  text = "Sound on" | "Sound off"
@@ -58,7 +58,7 @@ test('toggling sound off persists after reload', async ({ page }) => {
   await page.getByRole('switch').click();
   await expect(page.getByRole('switch')).toHaveText(/Sound off/i);
 
-  // Reload — ArcadeProvider re-reads localStorage
+  // Reload - ArcadeProvider re-reads localStorage
   await page.reload();
 
   // Setting must survive the reload
@@ -94,14 +94,14 @@ test('game records survive a page reload', async ({ page }) => {
   // Seed via evaluate (after initial mount), then reload so the app reads it
   await seedAndReload(page, SEEDED_ARCADE_STATE);
 
-  // Snake: "Score 42" (appears in both the card and recent plays — use first())
+  // Snake: "Score 42" (appears in both the card and recent plays - use first())
   await expect(page.getByText('Score 42').first()).toBeVisible();
-  // Memory: "12 moves, 30s" — formatElapsed(30000) = "30s"
+  // Memory: "12 moves, 30s" - formatElapsed(30000) = "30s"
   await expect(page.getByText(/12 moves/i)).toBeVisible();
   // Reaction: "Avg 280 ms"
   await expect(page.getByText('Avg 280 ms')).toBeVisible();
 
-  // Second reload — records must still be there
+  // Second reload - records must still be there
   await page.reload();
 
   await expect(page.getByText('Score 42').first()).toBeVisible();
@@ -158,7 +158,7 @@ test('"Reset data" + "Reset everything" clears records and shows empty state', a
   await expect(dialog).not.toBeVisible({ timeout: 3000 });
 
   // All best records reset to "No record yet"
-  await expect(page.getByText('No record yet')).toHaveCount(3, { timeout: 3000 });
+  await expect(page.getByText('No record yet')).toHaveCount(4, { timeout: 3000 });
 
   // Empty recent plays
   await expect(page.getByText(/No games played yet/i)).toBeVisible();
@@ -166,7 +166,7 @@ test('"Reset data" + "Reset everything" clears records and shows empty state', a
   assertNoConsoleErrors(errors);
 });
 
-test('"Reset data" dialog can be cancelled — records stay intact', async ({ page }) => {
+test('"Reset data" dialog can be cancelled - records stay intact', async ({ page }) => {
   const errors = trackConsoleErrors(page);
   await page.goto('/');
 
@@ -199,10 +199,10 @@ test('after reset, reloading the page still shows empty state', async ({ page })
   await page.getByRole('button', { name: 'Reset everything' }).click();
   await expect(page.getByText(/No games played yet/i)).toBeVisible({ timeout: 3000 });
 
-  // Reload — resetArcade() removed the localStorage key, so app boots to defaults
+  // Reload - resetArcade() removed the localStorage key, so app boots to defaults
   await page.reload();
   await expect(page.getByText(/No games played yet/i)).toBeVisible();
-  await expect(page.getByText('No record yet')).toHaveCount(3);
+  await expect(page.getByText('No record yet')).toHaveCount(4);
 
   assertNoConsoleErrors(errors);
 });

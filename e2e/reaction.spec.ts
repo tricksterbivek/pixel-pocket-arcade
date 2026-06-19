@@ -1,5 +1,5 @@
 /**
- * Reaction Timer spec — "too soon" penalty, full 5-round session, keyboard
+ * Reaction Timer spec - "too soon" penalty, full 5-round session, keyboard
  * activation (Space), and no console errors.
  *
  * Key DOM facts:
@@ -12,7 +12,7 @@
  *       completed: "<avg> ms. Session average"  (or "New best average!")
  *   - The target uses onPointerDown (not onClick); Playwright .click() fires
  *     pointerdown so it works correctly.
- *   - The random wait is 1 000–3 000 ms; tests wait for the aria-label change
+ *   - The random wait is 1 000-3 000 ms; tests wait for the aria-label change
  *     rather than a fixed delay.
  */
 
@@ -62,7 +62,7 @@ test('clicking during "Wait..." phase shows "Too Soon!"', async ({ page }) => {
   assertNoConsoleErrors(errors);
 });
 
-test('Too Soon allows retry — clicking "Tap to retry" re-arms the round', async ({ page }) => {
+test('Too Soon allows retry - clicking "Tap to retry" re-arms the round', async ({ page }) => {
   // Get to Too Soon state
   await page.getByRole('button', { name: /Tap to Start/i }).click();
   await expect(page.getByRole('button', { name: /Wait/i })).toBeVisible({ timeout: 3000 });
@@ -87,7 +87,7 @@ test('completing 5 valid rounds shows session average', async ({ page }) => {
   await expect(page.getByRole('button', { name: /GO!/i })).toBeVisible({ timeout: 5000 });
   await page.getByRole('button', { name: /GO!/i }).click();
 
-  // Rounds 2–5: from result, click to arm the next round, wait for GO!, react
+  // Rounds 2-5: from result, click to arm the next round, wait for GO!, react
   for (let round = 2; round <= 5; round++) {
     // After clicking GO!, phase → result (round 1-4) or completed (round 5)
     // For rounds 1-4 we land on "result" with "Tap for next round"

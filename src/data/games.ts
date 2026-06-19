@@ -43,6 +43,20 @@ export const GAMES: readonly GameDefinition[] = [
     scoreLabel: 'Avg ms',
     accent: '--color-reaction',
   },
+  {
+    id: 'drive',
+    title: 'Mini Drive',
+    description:
+      'Weave your mini car through oncoming traffic and go the distance. The longer you last, the faster it gets.',
+    route: '/games/drive',
+    controls: [
+      'Arrow keys or A and D to steer',
+      'On-screen pad or swipe on touch',
+      'Dodge the traffic and go far',
+    ],
+    scoreLabel: 'Distance',
+    accent: '--color-drive',
+  },
 ] as const;
 
 export const GAMES_BY_ID: Readonly<Record<GameId, GameDefinition>> = Object.freeze(

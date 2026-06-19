@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { GAMES, GAMES_BY_ID } from '../data/games';
-import type { ArcadeStorageV1, GameDefinition, GameId } from '../types/game';
+import type { ArcadeStorage, GameDefinition, GameId } from '../types/game';
 import { useArcade } from '../hooks/useArcade';
 import { formatElapsed } from '../lib/records';
 import { Panel } from '../components/Panel';
@@ -12,14 +12,16 @@ import heroArt from '../assets/hero.jpg';
 import snakeArt from '../assets/snake.jpg';
 import memoryArt from '../assets/memory.jpg';
 import reactionArt from '../assets/reaction.jpg';
+import driveArt from '../assets/drive.jpg';
 
 const ART: Record<GameId, string> = {
   snake: snakeArt,
   memory: memoryArt,
   reaction: reactionArt,
+  drive: driveArt,
 };
 
-function bestLabel(records: ArcadeStorageV1['records'], id: GameId): string {
+function bestLabel(records: ArcadeStorage['records'], id: GameId): string {
   switch (id) {
     case 'snake':
       return records.snakeHighScore > 0 ? `Score ${records.snakeHighScore}` : 'No record yet';
@@ -31,6 +33,8 @@ function bestLabel(records: ArcadeStorageV1['records'], id: GameId): string {
       return records.reactionBestAverageMs !== null
         ? `Avg ${Math.round(records.reactionBestAverageMs)} ms`
         : 'No record yet';
+    case 'drive':
+      return records.driveHighScore > 0 ? `${records.driveHighScore} m` : 'No record yet';
   }
 }
 
@@ -92,15 +96,15 @@ export default function Home() {
         <div className="text-center lg:text-left">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-muted backdrop-blur">
             <span className="h-2 w-2 rounded-full bg-snake" aria-hidden="true" />
-            Three games, zero downloads
+            Four games, zero downloads
           </span>
           <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             <span className="text-fg">Pixel Pocket </span>
             <span className="text-gradient">Arcade</span>
           </h1>
           <p className="mx-auto mt-4 max-w-md text-lg text-muted lg:mx-0">
-            A pocket sized retro arcade. Three quick games, local high scores, and snappy sound. No
-            sign in, no downloads, just press start.
+            A pocket sized arcade. Four quick games, local high scores, and snappy sound. No sign
+            in, no downloads, just press start.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
             <a href="#games" className={buttonClasses('primary', 'lg')}>
@@ -123,7 +127,7 @@ export default function Home() {
         <h2 id="games-heading" className="text-2xl font-bold text-fg">
           Pick a game
         </h2>
-        <ul className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {GAMES.map((game) => (
             <li key={game.id} className="h-full">
               <GameCard game={game} best={bestLabel(state.records, game.id)} />

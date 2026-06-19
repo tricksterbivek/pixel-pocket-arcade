@@ -1,17 +1,18 @@
-import type { ArcadeStorageV1, GameId, RecentPlay } from '../types/game';
+import type { ArcadeStorage, GameId, RecentPlay } from '../types/game';
 
 export const STORAGE_KEY = 'pixel-pocket-arcade';
 export const MAX_RECENT = 10;
-const VALID_GAME_IDS: readonly GameId[] = ['snake', 'memory', 'reaction'];
+const VALID_GAME_IDS: readonly GameId[] = ['snake', 'memory', 'reaction', 'drive'];
 
-export function defaultArcadeState(): ArcadeStorageV1 {
+export function defaultArcadeState(): ArcadeStorage {
   return {
-    version: 1,
+    version: 2,
     settings: { soundEnabled: true },
     records: {
       snakeHighScore: 0,
       memoryBest: null,
       reactionBestAverageMs: null,
+      driveHighScore: 0,
     },
     recentPlays: [],
   };
@@ -43,9 +44,11 @@ function parseRecentPlay(value: unknown): RecentPlay | null {
  * malformed fields fall back to defaults rather than throwing, so a
  * corrupted document can never crash the app or leak bad data.
  */
-export function parseArcadeState(value: unknown): ArcadeStorageV1 {
+export function parseArcadeState(value: unknown): ArcadeStorage {
   const fallback = defaultArcadeState();
-  if (!isObject(value) || value.version !== 1) return fallback;
+  // Accept v1 and v2. A v1 document migrates forward: its missing driveHighScore
+  // defaults below, and the returned document is stamped version 2.
+  if (!isObject(value) || (value.version !== 1 && value.version !== 2)) return fallback;
 
   const settings = isObject(value.settings) ? value.settings : {};
   const records = isObject(value.records) ? value.records : {};
@@ -67,7 +70,7 @@ export function parseArcadeState(value: unknown): ArcadeStorageV1 {
     .slice(0, MAX_RECENT);
 
   return {
-    version: 1,
+    version: 2,
     settings: {
       soundEnabled:
         typeof settings.soundEnabled === 'boolean'
@@ -81,6 +84,7 @@ export function parseArcadeState(value: unknown): ArcadeStorageV1 {
         isFiniteNumber(records.reactionBestAverageMs) && records.reactionBestAverageMs >= 0
           ? records.reactionBestAverageMs
           : null,
+      driveHighScore: isNonNegativeInt(records.driveHighScore) ? records.driveHighScore : 0,
     },
     recentPlays,
   };
@@ -94,7 +98,7 @@ function getStore(): Storage | null {
   }
 }
 
-export function loadArcade(store: Storage | null = getStore()): ArcadeStorageV1 {
+export function loadArcade(store: Storage | null = getStore()): ArcadeStorage {
   if (!store) return defaultArcadeState();
   try {
     const raw = store.getItem(STORAGE_KEY);
@@ -105,7 +109,7 @@ export function loadArcade(store: Storage | null = getStore()): ArcadeStorageV1 
   }
 }
 
-export function saveArcade(state: ArcadeStorageV1, store: Storage | null = getStore()): void {
+export function saveArcade(state: ArcadeStorage, store: Storage | null = getStore()): void {
   if (!store) return;
   try {
     store.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -114,7 +118,7 @@ export function saveArcade(state: ArcadeStorageV1, store: Storage | null = getSt
   }
 }
 
-export function resetArcade(store: Storage | null = getStore()): ArcadeStorageV1 {
+export function resetArcade(store: Storage | null = getStore()): ArcadeStorage {
   if (store) {
     try {
       store.removeItem(STORAGE_KEY);

@@ -1,5 +1,5 @@
 /**
- * Navigation spec — home page structure, every game link, back navigation,
+ * Navigation spec - home page structure, every game link, back navigation,
  * and the 404 not-found route.
  *
  * Runs on both `desktop` (Desktop Chrome) and `mobile` (Pixel 5) projects.
@@ -46,9 +46,9 @@ test.describe('Home page', () => {
     await page.goto('/');
     // Empty recent plays
     await expect(page.getByText('No games played yet')).toBeVisible();
-    // All three game cards show "No record yet" (default best labels)
+    // All four game cards show "No record yet" (default best labels)
     const noRecordTexts = page.getByText('No record yet');
-    expect(await noRecordTexts.count()).toBe(3);
+    expect(await noRecordTexts.count()).toBe(4);
   });
 });
 

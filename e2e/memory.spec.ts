@@ -1,5 +1,5 @@
 /**
- * Memory Match spec — card flipping, matching pairs, mismatch/lock flow,
+ * Memory Match spec - card flipping, matching pairs, mismatch/lock flow,
  * "New Game" restart, and no console errors.
  *
  * Key DOM facts:
@@ -110,7 +110,7 @@ test('flipping two mismatched cards locks briefly then resets both to face-down'
   await page.getByRole('button', { name: `Card ${card1}, face down` }).click();
   await page.getByRole('button', { name: `Card ${card2}, face down` }).click();
 
-  // Locked phase — the game checks the pair (briefly shown)
+  // Locked phase - the game checks the pair (briefly shown)
   // After ~800 ms the cards flip back; wait generously
   await expect(
     page.getByRole('button', { name: /Card \d+, face down/ }),
@@ -187,7 +187,7 @@ test('completing all 8 pairs shows success status', async ({ page }) => {
     );
   }
 
-  // All 16 matched — game complete
+  // All 16 matched - game complete
   await expect(page.getByRole('button', { name: /matched/ })).toHaveCount(16);
 
   // Status badge shows "New Best!" on a fresh run (no prior record) or "Complete!" otherwise.

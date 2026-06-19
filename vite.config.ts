@@ -8,6 +8,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: { port: 5173, strictPort: true },
   preview: { port: 5173, strictPort: true },
+  // The Mini Drive route bundles three.js; it is lazy-loaded, so this only
+  // affects that one chunk, not the initial app load.
+  build: { chunkSizeWarningLimit: 700 },
   test: {
     environment: 'jsdom',
     globals: true,

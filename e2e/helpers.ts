@@ -55,7 +55,7 @@ export async function assertNoHorizontalScroll(page: Page): Promise<void> {
 
 /**
  * Inspect the hidden front-face emoji spans (aria-hidden, always in DOM) to
- * discover two cards that share a symbol — without flipping any cards.
+ * discover two cards that share a symbol - without flipping any cards.
  *
  * Returns 1-based card numbers so tests can target "Card N, face down" by
  * exact aria-label even after the first card is flipped.
@@ -104,7 +104,7 @@ export async function findMatchingPairCardNumbers(
         }
       }
     }
-    return [1, 2]; // fallback — shouldn't happen with the 8-pair set
+    return [1, 2]; // fallback - shouldn't happen with the 8-pair set
   });
 }
 

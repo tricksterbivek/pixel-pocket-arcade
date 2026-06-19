@@ -45,26 +45,33 @@ describe('summarizePlay', () => {
     expect(summarizePlay({ game: 'snake', score: 42 })).toBe('Score 42');
     expect(summarizePlay({ game: 'memory', moves: 12, elapsedMs: 38000 })).toBe('12 moves, 0:38');
     expect(summarizePlay({ game: 'reaction', averageMs: 284.6, rounds: [] })).toBe('Avg 285 ms');
+    expect(summarizePlay({ game: 'drive', score: 1500 })).toBe('1500 m');
   });
 });
 
 describe('applyResult', () => {
   it('keeps the higher snake score', () => {
-    const start = { ...defaultArcadeState(), records: { snakeHighScore: 50, memoryBest: null, reactionBestAverageMs: null } };
+    const start = { ...defaultArcadeState(), records: { snakeHighScore: 50, memoryBest: null, reactionBestAverageMs: null, driveHighScore: 0 } };
     expect(applyResult(start, { game: 'snake', score: 30 }, 1).records.snakeHighScore).toBe(50);
     expect(applyResult(start, { game: 'snake', score: 70 }, 1).records.snakeHighScore).toBe(70);
   });
 
   it('updates memory best only when better', () => {
-    const start = { ...defaultArcadeState(), records: { snakeHighScore: 0, memoryBest: { moves: 12, elapsedMs: 30000 }, reactionBestAverageMs: null } };
+    const start = { ...defaultArcadeState(), records: { snakeHighScore: 0, memoryBest: { moves: 12, elapsedMs: 30000 }, reactionBestAverageMs: null, driveHighScore: 0 } };
     expect(applyResult(start, { game: 'memory', moves: 14, elapsedMs: 1000 }, 1).records.memoryBest).toEqual({ moves: 12, elapsedMs: 30000 });
     expect(applyResult(start, { game: 'memory', moves: 10, elapsedMs: 99000 }, 1).records.memoryBest).toEqual({ moves: 10, elapsedMs: 99000 });
   });
 
   it('updates reaction best only when lower', () => {
-    const start = { ...defaultArcadeState(), records: { snakeHighScore: 0, memoryBest: null, reactionBestAverageMs: 300 } };
+    const start = { ...defaultArcadeState(), records: { snakeHighScore: 0, memoryBest: null, reactionBestAverageMs: 300, driveHighScore: 0 } };
     expect(applyResult(start, { game: 'reaction', averageMs: 320, rounds: [] }, 1).records.reactionBestAverageMs).toBe(300);
     expect(applyResult(start, { game: 'reaction', averageMs: 250, rounds: [] }, 1).records.reactionBestAverageMs).toBe(250);
+  });
+
+  it('keeps the higher drive score', () => {
+    const start = { ...defaultArcadeState(), records: { snakeHighScore: 0, memoryBest: null, reactionBestAverageMs: null, driveHighScore: 800 } };
+    expect(applyResult(start, { game: 'drive', score: 500 }, 1).records.driveHighScore).toBe(800);
+    expect(applyResult(start, { game: 'drive', score: 1200 }, 1).records.driveHighScore).toBe(1200);
   });
 
   it('prepends recent plays newest first and caps at 10', () => {

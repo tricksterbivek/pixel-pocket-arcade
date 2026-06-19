@@ -52,7 +52,7 @@ test('Home: interactive elements show a visible focus outline when tabbed', asyn
     return getComputedStyle(el).outlineStyle;
   });
 
-  // Should NOT be "none" — CSS sets outline: 2px solid var(--color-focus)
+  // Should NOT be "none" - CSS sets outline: 2px solid var(--color-focus)
   expect(focusedOutline).not.toBe('none');
   expect(focusedOutline).not.toBe('');
 });
@@ -140,25 +140,25 @@ const VIEWPORTS = [
 ] as const;
 
 for (const { label, width, height } of VIEWPORTS) {
-  test(`No horizontal scroll at ${label} — home page`, async ({ page }) => {
+  test(`No horizontal scroll at ${label} - home page`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.goto('/');
     await assertNoHorizontalScroll(page);
   });
 
-  test(`No horizontal scroll at ${label} — snake page`, async ({ page }) => {
+  test(`No horizontal scroll at ${label} - snake page`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.goto('/games/snake');
     await assertNoHorizontalScroll(page);
   });
 
-  test(`No horizontal scroll at ${label} — memory page`, async ({ page }) => {
+  test(`No horizontal scroll at ${label} - memory page`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.goto('/games/memory');
     await assertNoHorizontalScroll(page);
   });
 
-  test(`No horizontal scroll at ${label} — reaction page`, async ({ page }) => {
+  test(`No horizontal scroll at ${label} - reaction page`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.goto('/games/reaction');
     await assertNoHorizontalScroll(page);

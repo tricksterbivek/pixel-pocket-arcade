@@ -25,12 +25,12 @@
 ## 🎮 SELECT YOUR GAME
 
 ```
- ╔════════════════╗  ╔════════════════╗  ╔════════════════╗
- ║   🐍 SNAKE     ║  ║ 🃏 MEMORY      ║  ║ ⚡ REACTION    ║
- ║                ║  ║    MATCH       ║  ║    TIMER       ║
- ║  Eat. Grow.    ║  ║  Flip & pair   ║  ║  Fast fingers  ║
- ║  Don't crash.  ║  ║  every card.   ║  ║  win the day.  ║
- ╚════════════════╝  ╚════════════════╝  ╚════════════════╝
+ ╔════════════════╗  ╔════════════════╗  ╔════════════════╗  ╔════════════════╗
+ ║   🐍 SNAKE     ║  ║ 🃏 MEMORY      ║  ║ ⚡ REACTION    ║  ║ 🚗 MINI DRIVE  ║
+ ║                ║  ║    MATCH       ║  ║    TIMER       ║  ║    (3D)        ║
+ ║  Eat. Grow.    ║  ║  Flip & pair   ║  ║  Fast fingers  ║  ║  Dodge the     ║
+ ║  Don't crash.  ║  ║  every card.   ║  ║  win the day.  ║  ║  traffic.      ║
+ ╚════════════════╝  ╚════════════════╝  ╚════════════════╝  ╚════════════════╝
 ```
 
 | Game | Objective | Score |
@@ -38,6 +38,7 @@
 | 🐍 **Snake** | Eat, grow, and survive | High score |
 | 🃏 **Memory Match** | Match every pair | Fewest moves, then fastest time |
 | ⚡ **Reaction Timer** | React on the green light | Best average |
+| 🚗 **Mini Drive** | Dodge oncoming traffic in 3D | Best distance |
 
 ---
 
@@ -96,11 +97,18 @@ npm run preview # serves the production build on http://localhost:5173
 - 🚫 Do **not** move before the green light
 - 🔁 Five valid rounds per session
 
+### 🚗 MINI DRIVE (3D)
+- ⬅️➡️ Arrow keys or `A` `D` to steer between lanes
+- 📱 On-screen steer buttons for touch
+- 🏁 Dodge the oncoming cars and go the distance
+
 ---
 
 ## 🏗️ INSIDE THE CABINET — `ARCHITECTURE`
 
-Built with **React**, **TypeScript** (strict), **Vite**, **Tailwind CSS v4**, and **React Router**.
+Built with **React**, **TypeScript** (strict), **Vite**, **Tailwind CSS v4**, **React Router**, and **three.js** (for the 3D Mini Drive).
+
+- 🚗 Mini Drive renders in 3D with three.js. Its route and the three.js bundle are lazy loaded, so they only download when you open that game; the rest of the arcade stays light.
 
 - Deterministic game rules are pure and live in `src/games/<id>/<id>Logic.ts`, separate from the React components that render them and own real timers and input. This keeps the rules unit testable without waiting on timers.
 - Routing is in `src/App.tsx`. Game routes are lazy loaded with a visible loading fallback and wrapped in an error boundary with a recovery action.

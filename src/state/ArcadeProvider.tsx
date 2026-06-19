@@ -1,12 +1,12 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { ArcadeStorageV1, GameResult } from '../types/game';
+import type { ArcadeStorage, GameResult } from '../types/game';
 import { loadArcade, resetArcade, saveArcade } from '../lib/storage';
 import { applyResult } from '../lib/records';
 import { audio } from '../lib/audio';
 
 export interface ArcadeContextValue {
-  state: ArcadeStorageV1;
+  state: ArcadeStorage;
   recordResult: (result: GameResult) => void;
   toggleSound: () => void;
   reset: () => void;
@@ -16,7 +16,7 @@ export const ArcadeContext = createContext<ArcadeContextValue | null>(null);
 
 export function ArcadeProvider({ children }: { children: ReactNode }) {
   // Read storage exactly once at startup, never inside a render loop.
-  const [state, setState] = useState<ArcadeStorageV1>(() => loadArcade());
+  const [state, setState] = useState<ArcadeStorage>(() => loadArcade());
 
   // Keep the audio service in sync with the saved sound setting.
   useEffect(() => {
