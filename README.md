@@ -1,5 +1,7 @@
 # Pixel Pocket Arcade
 
+**[Try it live here](https://pixel-pocket-arcade.vercel.app/)**
+
 A polished retro mini-game website. Three quick games, local high scores, and snappy generated
 sound, all client side. No sign in, no backend, no downloads.
 
