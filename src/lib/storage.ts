@@ -2,17 +2,18 @@ import type { ArcadeStorage, GameId, RecentPlay } from '../types/game';
 
 export const STORAGE_KEY = 'pixel-pocket-arcade';
 export const MAX_RECENT = 10;
-const VALID_GAME_IDS: readonly GameId[] = ['snake', 'memory', 'reaction', 'drive'];
+const VALID_GAME_IDS: readonly GameId[] = ['snake', 'memory', 'reaction', 'drive', 'gunner'];
 
 export function defaultArcadeState(): ArcadeStorage {
   return {
-    version: 2,
+    version: 3,
     settings: { soundEnabled: true },
     records: {
       snakeHighScore: 0,
       memoryBest: null,
       reactionBestAverageMs: null,
       driveHighScore: 0,
+      gunnerHighScore: 0,
     },
     recentPlays: [],
   };
@@ -46,9 +47,13 @@ function parseRecentPlay(value: unknown): RecentPlay | null {
  */
 export function parseArcadeState(value: unknown): ArcadeStorage {
   const fallback = defaultArcadeState();
-  // Accept v1 and v2. A v1 document migrates forward: its missing driveHighScore
-  // defaults below, and the returned document is stamped version 2.
-  if (!isObject(value) || (value.version !== 1 && value.version !== 2)) return fallback;
+  // Accept v1, v2, and v3. Older documents migrate forward: any missing record
+  // field defaults below, and the returned document is stamped version 3.
+  if (
+    !isObject(value) ||
+    (value.version !== 1 && value.version !== 2 && value.version !== 3)
+  )
+    return fallback;
 
   const settings = isObject(value.settings) ? value.settings : {};
   const records = isObject(value.records) ? value.records : {};
@@ -70,7 +75,7 @@ export function parseArcadeState(value: unknown): ArcadeStorage {
     .slice(0, MAX_RECENT);
 
   return {
-    version: 2,
+    version: 3,
     settings: {
       soundEnabled:
         typeof settings.soundEnabled === 'boolean'
@@ -85,6 +90,7 @@ export function parseArcadeState(value: unknown): ArcadeStorage {
           ? records.reactionBestAverageMs
           : null,
       driveHighScore: isNonNegativeInt(records.driveHighScore) ? records.driveHighScore : 0,
+      gunnerHighScore: isNonNegativeInt(records.gunnerHighScore) ? records.gunnerHighScore : 0,
     },
     recentPlays,
   };

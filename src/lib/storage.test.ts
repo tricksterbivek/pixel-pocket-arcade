@@ -26,13 +26,14 @@ function fakeStore(): Storage {
 describe('defaultArcadeState', () => {
   it('starts sound on with empty records', () => {
     const s = defaultArcadeState();
-    expect(s.version).toBe(2);
+    expect(s.version).toBe(3);
     expect(s.settings.soundEnabled).toBe(true);
     expect(s.records).toEqual({
       snakeHighScore: 0,
       memoryBest: null,
       reactionBestAverageMs: null,
       driveHighScore: 0,
+      gunnerHighScore: 0,
     });
     expect(s.recentPlays).toEqual([]);
   });
@@ -41,20 +42,21 @@ describe('defaultArcadeState', () => {
 describe('parseArcadeState', () => {
   it('round-trips a valid document', () => {
     const valid: ArcadeStorage = {
-      version: 2,
+      version: 3,
       settings: { soundEnabled: false },
       records: {
         snakeHighScore: 42,
         memoryBest: { moves: 12, elapsedMs: 38000 },
         reactionBestAverageMs: 284,
         driveHighScore: 1500,
+        gunnerHighScore: 900,
       },
       recentPlays: [{ game: 'snake', label: 'Score 42', at: 1000 }],
     };
     expect(parseArcadeState(valid)).toEqual(valid);
   });
 
-  it('migrates a v1 document forward, defaulting driveHighScore and stamping v2', () => {
+  it('migrates a v1 document forward, defaulting new record fields and stamping v3', () => {
     const v1 = {
       version: 1,
       settings: { soundEnabled: false },
@@ -62,11 +64,30 @@ describe('parseArcadeState', () => {
       recentPlays: [{ game: 'snake', label: 'Score 7', at: 5 }],
     };
     const parsed = parseArcadeState(v1);
-    expect(parsed.version).toBe(2);
+    expect(parsed.version).toBe(3);
     expect(parsed.records.driveHighScore).toBe(0);
+    expect(parsed.records.gunnerHighScore).toBe(0);
     expect(parsed.records.snakeHighScore).toBe(7);
     expect(parsed.records.reactionBestAverageMs).toBe(300);
     expect(parsed.recentPlays).toEqual([{ game: 'snake', label: 'Score 7', at: 5 }]);
+  });
+
+  it('migrates a v2 document forward, defaulting gunnerHighScore and stamping v3', () => {
+    const v2 = {
+      version: 2,
+      settings: { soundEnabled: true },
+      records: {
+        snakeHighScore: 9,
+        memoryBest: null,
+        reactionBestAverageMs: null,
+        driveHighScore: 1200,
+      },
+      recentPlays: [],
+    };
+    const parsed = parseArcadeState(v2);
+    expect(parsed.version).toBe(3);
+    expect(parsed.records.driveHighScore).toBe(1200);
+    expect(parsed.records.gunnerHighScore).toBe(0);
   });
 
   it('falls back to defaults on non-object', () => {
@@ -130,7 +151,7 @@ describe('load / save / reset', () => {
 
   it('reset clears storage and returns defaults', () => {
     const store = fakeStore();
-    saveArcade({ ...defaultArcadeState(), records: { snakeHighScore: 5, memoryBest: null, reactionBestAverageMs: null, driveHighScore: 0 } }, store);
+    saveArcade({ ...defaultArcadeState(), records: { snakeHighScore: 5, memoryBest: null, reactionBestAverageMs: null, driveHighScore: 0, gunnerHighScore: 0 } }, store);
     expect(resetArcade(store)).toEqual(defaultArcadeState());
     expect(store.getItem('pixel-pocket-arcade')).toBeNull();
   });

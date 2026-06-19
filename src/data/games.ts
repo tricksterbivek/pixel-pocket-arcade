@@ -57,6 +57,20 @@ export const GAMES: readonly GameDefinition[] = [
     scoreLabel: 'Distance',
     accent: '--color-drive',
   },
+  {
+    id: 'gunner',
+    title: 'Star Gunner',
+    description:
+      'Blast incoming asteroids in a 3D shooting gallery. The targets are real near-Earth objects streamed live from NASA, so every rock carries its true name.',
+    route: '/games/gunner',
+    controls: [
+      'Move the mouse or finger to aim',
+      'Click, tap, or press Space to fire',
+      'Hazardous rocks are worth more points',
+    ],
+    scoreLabel: 'Score',
+    accent: '--color-gunner',
+  },
 ] as const;
 
 export const GAMES_BY_ID: Readonly<Record<GameId, GameDefinition>> = Object.freeze(

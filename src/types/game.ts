@@ -1,4 +1,4 @@
-export type GameId = 'snake' | 'memory' | 'reaction' | 'drive';
+export type GameId = 'snake' | 'memory' | 'reaction' | 'drive' | 'gunner';
 
 /**
  * Shared, render-agnostic description of a game. Used by the home page,
@@ -36,7 +36,17 @@ export interface DriveResult {
   /** Distance reached, in meters. Higher is better. */
   score: number;
 }
-export type GameResult = SnakeResult | MemoryResult | ReactionResult | DriveResult;
+export interface GunnerResult {
+  game: 'gunner';
+  /** Points scored shooting asteroids. Higher is better. */
+  score: number;
+}
+export type GameResult =
+  | SnakeResult
+  | MemoryResult
+  | ReactionResult
+  | DriveResult
+  | GunnerResult;
 
 /** One entry in the home page recent-plays list. */
 export interface RecentPlay {
@@ -49,11 +59,12 @@ export interface RecentPlay {
 
 /**
  * The single versioned storage document for the whole arcade.
- * Version 2 adds driveHighScore. Version 1 documents load fine: the parser
- * defaults the missing field, so old saves migrate forward transparently.
+ * Version 3 adds gunnerHighScore (v2 added driveHighScore). Older documents
+ * load fine: the parser defaults any missing field, so old saves migrate
+ * forward transparently.
  */
 export interface ArcadeStorage {
-  version: 2;
+  version: 3;
   settings: {
     soundEnabled: boolean;
   };
@@ -62,6 +73,7 @@ export interface ArcadeStorage {
     memoryBest: { moves: number; elapsedMs: number } | null;
     reactionBestAverageMs: number | null;
     driveHighScore: number;
+    gunnerHighScore: number;
   };
   recentPlays: RecentPlay[];
 }

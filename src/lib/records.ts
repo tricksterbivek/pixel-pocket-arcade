@@ -34,6 +34,8 @@ export function summarizePlay(result: GameResult): string {
       return `Avg ${Math.round(result.averageMs)} ms`;
     case 'drive':
       return `${result.score} m`;
+    case 'gunner':
+      return `${result.score} pts`;
   }
 }
 
@@ -65,6 +67,9 @@ export function applyResult(
       break;
     case 'drive':
       records.driveHighScore = Math.max(records.driveHighScore, result.score);
+      break;
+    case 'gunner':
+      records.gunnerHighScore = Math.max(records.gunnerHighScore, result.score);
       break;
   }
 

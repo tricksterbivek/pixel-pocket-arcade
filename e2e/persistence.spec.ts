@@ -158,7 +158,7 @@ test('"Reset data" + "Reset everything" clears records and shows empty state', a
   await expect(dialog).not.toBeVisible({ timeout: 3000 });
 
   // All best records reset to "No record yet"
-  await expect(page.getByText('No record yet')).toHaveCount(4, { timeout: 3000 });
+  await expect(page.getByText('No record yet')).toHaveCount(5, { timeout: 3000 });
 
   // Empty recent plays
   await expect(page.getByText(/No games played yet/i)).toBeVisible();
@@ -202,7 +202,7 @@ test('after reset, reloading the page still shows empty state', async ({ page })
   // Reload - resetArcade() removed the localStorage key, so app boots to defaults
   await page.reload();
   await expect(page.getByText(/No games played yet/i)).toBeVisible();
-  await expect(page.getByText('No record yet')).toHaveCount(4);
+  await expect(page.getByText('No record yet')).toHaveCount(5);
 
   assertNoConsoleErrors(errors);
 });

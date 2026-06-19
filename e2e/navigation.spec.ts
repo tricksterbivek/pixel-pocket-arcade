@@ -46,9 +46,9 @@ test.describe('Home page', () => {
     await page.goto('/');
     // Empty recent plays
     await expect(page.getByText('No games played yet')).toBeVisible();
-    // All four game cards show "No record yet" (default best labels)
+    // All five game cards show "No record yet" (default best labels)
     const noRecordTexts = page.getByText('No record yet');
-    expect(await noRecordTexts.count()).toBe(4);
+    expect(await noRecordTexts.count()).toBe(5);
   });
 });
 
